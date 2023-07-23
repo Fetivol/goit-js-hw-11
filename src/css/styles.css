@@ -1,0 +1,14 @@
+img {
+  width: 400px;
+  height: 250px;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 20px;
+}
+
+.info {
+  display: flex;
+}
