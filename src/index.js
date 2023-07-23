@@ -7,16 +7,20 @@ const ref = {
 };
 
 ref.formEl.addEventListener('submit', searchImages);
+ref.loadButEl.addEventListener('click', loadMoreImages);
+
+let page = 1;
 
 async function searchImages(event) {
   event.preventDefault();
-  //   let searchImage = ref.formEl.elements.searchQuery.value;
-  await fetchImages(ref.formEl.elements.searchQuery.value)
+  page = 1;
+  await fetchImages(ref.formEl.elements.searchQuery.value, page)
     .then(data => {
       console.log(data);
       console.log(data.hits);
       const imageCards = data.hits.map(item => createCard(item)).join('');
-      ref.galerryEl.insertAdjacentHTML('beforeend', imageCards);
+      // ref.galerryEl.insertAdjacentHTML('beforeend', imageCards);
+      ref.galerryEl.innerHTML = imageCards;
       console.log(data);
     })
     .catch(error => {
@@ -52,4 +56,19 @@ function createCard(imageData) {
           </p>
         </div>
       </div>`;
+}
+
+async function loadMoreImages() {
+  page += 1;
+  await fetchImages(ref.formEl.elements.searchQuery.value, page)
+    .then(data => {
+      console.log(data);
+      console.log(data.hits);
+      const imageCards = data.hits.map(item => createCard(item)).join('');
+      ref.galerryEl.insertAdjacentHTML('beforeend', imageCards);
+      console.log(data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
 }
