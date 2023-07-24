@@ -1,3 +1,11 @@
+body {
+  background-color: rgb(246, 246, 240);
+}
+
+a {
+  text-decoration: none;
+}
+
 .photo-card img {
   width: 400px;
   height: 250px;
@@ -23,13 +31,17 @@
   margin-top: 15px;
   border-radius: 8px;
   box-shadow: 0px 9px 24px -17px rgba(66, 68, 90, 1);
+  background-color: #eef5fa;
 }
 .search-form {
   margin-top: 0;
   display: flex;
-  background-color: bisque;
+  gap: 10px;
   align-items: center;
   justify-content: center;
+}
+.search-form input {
+  height: 22px;
 }
 
 .search-form,
@@ -38,6 +50,60 @@
   margin-right: auto;
 }
 
-a {
-  text-decoration: none;
+.load-more,
+.searc-form button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.scroll-up {
+  position: fixed;
+  bottom: 40px;
+  right: 10px;
+  padding: 5px;
+  height: 50px;
+  width: 50px;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  font-size: 22px;
+
+  background: linear-gradient(180deg, #4b91f7 0%, #367af6 100%);
+  background-origin: border-box;
+  box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25),
+    inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 75%;
+}
+
+.load-more,
+.search-form button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+  border-radius: 6px;
+  border: none;
+
+  color: #fff;
+  background: linear-gradient(180deg, #4b91f7 0%, #367af6 100%);
+  background-origin: border-box;
+  box-shadow: 0px 0.5px 1.5px rgba(54, 122, 246, 0.25),
+    inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.load-more:focus,
+.search-form button:focus,
+.scroll-up:focus {
+  box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2),
+    0px 0.5px 1.5px rgba(54, 122, 246, 0.25),
+    0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+  outline: 0;
 }
