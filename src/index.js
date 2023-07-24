@@ -19,6 +19,7 @@ ref.scrollUpEl.addEventListener('click', () =>
 );
 
 ref.loadButEl.style.display = 'none';
+let searchImage = '';
 let page = 1;
 
 async function searchImages(event) {
@@ -26,8 +27,10 @@ async function searchImages(event) {
   page = 1;
   await fetchImages(ref.formEl.elements.searchQuery.value.trim(), page)
     .then(data => {
+      searchImage = ref.formEl.elements.searchQuery.value.trim();
       ref.galerryEl.innerHTML = '';
       ref.loadButEl.style.display = 'none';
+
       if (
         data.totalHits === 0 ||
         ref.formEl.elements.searchQuery.value === ''
@@ -43,7 +46,7 @@ async function searchImages(event) {
       ref.galerryEl.innerHTML = imageCards;
 
       gallery.refresh();
-
+      ref.formEl.elements.searchQuery.value = '';
       if (data.totalHits <= 40) {
         ref.loadButEl.style.display = 'none';
         lastElement();
@@ -84,7 +87,7 @@ function createCard(imageData) {
 
 async function loadMoreImages() {
   page += 1;
-  await fetchImages(ref.formEl.elements.searchQuery.value, page)
+  await fetchImages(searchImage, page)
     .then(data => {
       const imageCards = data.hits.map(item => createCard(item)).join('');
       ref.galerryEl.insertAdjacentHTML('beforeend', imageCards);
