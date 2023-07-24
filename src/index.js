@@ -1,4 +1,7 @@
 import { fetchImages } from './fetch';
+import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const ref = {
   formEl: document.querySelector('.search-form'),
@@ -6,69 +9,84 @@ const ref = {
   loadButEl: document.querySelector('.load-more'),
 };
 
+let gallery = new SimpleLightbox('.gallery a');
+
 ref.formEl.addEventListener('submit', searchImages);
 ref.loadButEl.addEventListener('click', loadMoreImages);
 
+ref.loadButEl.style.display = 'none';
 let page = 1;
-
 async function searchImages(event) {
   event.preventDefault();
   page = 1;
-  await fetchImages(ref.formEl.elements.searchQuery.value, page)
+  await fetchImages(ref.formEl.elements.searchQuery.value.trim(), page)
     .then(data => {
       console.log(data);
-      console.log(data.hits);
+      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
       const imageCards = data.hits.map(item => createCard(item)).join('');
-      // ref.galerryEl.insertAdjacentHTML('beforeend', imageCards);
       ref.galerryEl.innerHTML = imageCards;
-      console.log(data);
+      gallery.refresh();
+      if (data.totalHits <= 40) {
+        ref.loadButEl.style.display = 'none';
+      }
+      ref.loadButEl.style.display = 'block';
     })
     .catch(error => {
       console.error(error);
+      Notiflix.Notify.failure('Something went wrong, please reload the page');
     });
 }
 
 function createCard(imageData) {
-  let {
-    webformatURL,
-    //   largeImageURL,
-    tags,
-    likes,
-    views,
-    comments,
-    downloads,
-  } = imageData;
+  let { webformatURL, largeImageURL, tags, likes, views, comments, downloads } =
+    imageData;
 
-  return `<div class="photo-card">
+  return `<a href="${largeImageURL}">
+  <div class="photo-card">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" />
         <div class="info">
           <p class="info-item">
-            <b>Likes</b> ${likes}
+            <b>Likes:</b> ${likes}
           </p>
           <p class="info-item">
-            <b>Views</b> ${views}
+            <b>Views:</b> ${views}
           </p>
           <p class="info-item">
-            <b>Comments</b> ${comments}
+            <b>Comments:</b> ${comments}
           </p>
           <p class="info-item">
-            <b>Downloads</b> ${downloads}
+            <b>Downloads:</b> ${downloads}
           </p>
         </div>
-      </div>`;
+      </div>
+</a>`;
 }
 
 async function loadMoreImages() {
   page += 1;
+  console.log(page);
   await fetchImages(ref.formEl.elements.searchQuery.value, page)
     .then(data => {
-      console.log(data);
+      //   console.log(data);
       console.log(data.hits);
       const imageCards = data.hits.map(item => createCard(item)).join('');
       ref.galerryEl.insertAdjacentHTML('beforeend', imageCards);
-      console.log(data);
+      gallery.refresh();
+      pageNumbers(data);
     })
     .catch(error => {
       console.error(error);
     });
+}
+
+function pageNumbers(data) {
+  let pagesCount = Math.round(data.totalHits / 40);
+  if (page !== pagesCount) {
+    return;
+  }
+  ref.loadButEl.style.display = 'none';
+
+  Notiflix.Notify.info(
+    "We're sorry, but you've reached the end of search results."
+  );
 }
