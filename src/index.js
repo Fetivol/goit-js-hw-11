@@ -25,11 +25,14 @@ let page = 1;
 async function searchImages(event) {
   event.preventDefault();
   page = 1;
+  Notiflix.Loading.dots('We are searching your images!');
   await fetchImages(ref.formEl.elements.searchQuery.value.trim(), page)
     .then(data => {
       searchImage = ref.formEl.elements.searchQuery.value.trim();
       ref.galerryEl.innerHTML = '';
       ref.loadButEl.style.display = 'none';
+
+      Notiflix.Loading.remove();
 
       if (
         data.totalHits === 0 ||
@@ -86,11 +89,13 @@ function createCard(imageData) {
 }
 
 async function loadMoreImages() {
+  Notiflix.Loading.dots('We are searching for more images!');
   page += 1;
   await fetchImages(searchImage, page)
     .then(data => {
       const imageCards = data.hits.map(item => createCard(item)).join('');
       ref.galerryEl.insertAdjacentHTML('beforeend', imageCards);
+      Notiflix.Loading.remove();
       gallery.refresh();
       scroll();
       pageNumbers(data);
