@@ -28,6 +28,7 @@ async function searchImages(event) {
       gallery.refresh();
       if (data.totalHits <= 40) {
         ref.loadButEl.style.display = 'none';
+        return;
       }
       ref.loadButEl.style.display = 'block';
     })
