@@ -106,7 +106,8 @@ async function loadMoreImages() {
 }
 
 function pageNumbers(data) {
-  let pagesCount = Math.round(data.totalHits / 40);
+  let pagesCount = Math.ceil(data.totalHits / 40);
+  console.log(pagesCount);
   if (page !== pagesCount) {
     return;
   }
