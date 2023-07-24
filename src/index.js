@@ -21,7 +21,12 @@ async function searchImages(event) {
   page = 1;
   await fetchImages(ref.formEl.elements.searchQuery.value.trim(), page)
     .then(data => {
-      console.log(data);
+      if (data.totalHits === 0) {
+        Notiflix.Notify.failure(
+          "Sorry, we didn't find anything! Try changing your search!"
+        );
+        return;
+      }
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
       const imageCards = data.hits.map(item => createCard(item)).join('');
       ref.galerryEl.innerHTML = imageCards;
@@ -65,11 +70,8 @@ function createCard(imageData) {
 
 async function loadMoreImages() {
   page += 1;
-  console.log(page);
   await fetchImages(ref.formEl.elements.searchQuery.value, page)
     .then(data => {
-      //   console.log(data);
-      console.log(data.hits);
       const imageCards = data.hits.map(item => createCard(item)).join('');
       ref.galerryEl.insertAdjacentHTML('beforeend', imageCards);
       gallery.refresh();
