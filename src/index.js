@@ -26,6 +26,8 @@ async function searchImages(event) {
   page = 1;
   await fetchImages(ref.formEl.elements.searchQuery.value.trim(), page)
     .then(data => {
+      ref.galerryEl.innerHTML = '';
+      ref.loadButEl.style.display = 'none';
       if (
         data.totalHits === 0 ||
         ref.formEl.elements.searchQuery.value === ''
